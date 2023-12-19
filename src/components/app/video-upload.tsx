@@ -47,7 +47,19 @@ export const FileUploaderDroppable: React.FC<{
   className?: string;
   file: File | null;
   onFilesSet: React.Dispatch<React.SetStateAction<File | null>>;
-}> = ({ className = "", file, onFilesSet }) => {
+  onSubmit: () => void;
+  getMessage: () => void;
+  videoUploading: boolean;
+  textProcessing: boolean;
+}> = ({
+  className = "",
+  file,
+  onFilesSet,
+  onSubmit,
+  getMessage,
+  videoUploading,
+  textProcessing,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onUploadClick = () => {
@@ -101,16 +113,35 @@ export const FileUploaderDroppable: React.FC<{
           <div>
             <div className="h-4"></div>
             <div className="h-auto max-h-[400px] w-auto max-w-[600px]">
-              <video src={URL.createObjectURL(file)} className=""></video>
+              <video
+                src={URL.createObjectURL(file)}
+                className=""
+                controls
+              ></video>
             </div>
           </div>
         )}
       </CardContent>
 
       <CardFooter className="flex justify-start gap-2">
-        <Button variant="default" type="button" onClick={onClear}>
-          Process
+        <Button
+          variant="default"
+          type="button"
+          onClick={onSubmit}
+          disabled={videoUploading}
+        >
+          Upload
         </Button>
+
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={getMessage}
+          disabled={textProcessing}
+        >
+          Get Text
+        </Button>
+
         <Button variant="outline" type="button" onClick={onClear}>
           Clear
         </Button>

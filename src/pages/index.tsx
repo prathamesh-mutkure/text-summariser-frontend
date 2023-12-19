@@ -7,9 +7,43 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
+import { getTextFromId, getTextId, uploadFile } from "~/lib/apis";
 
 export default function Home() {
   const [video, setVideo] = useState<File | null>(null);
+  const [textId, setTextId] = useState<string | null>(null);
+  const [summary, setSummary] = useState<string | null>(``);
+
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoUploaded, setVideoUploaded] = useState(false);
+
+  async function onSubmit() {
+    if (!video) return;
+
+    try {
+      setVideoUploaded(false);
+      setVideoUploading(true);
+      const result = await uploadFile(video);
+
+      console.log(result);
+    } catch (e) {
+      console.log("Error uploading: ", e);
+    } finally {
+      setVideoUploading(false);
+      setVideoUploaded(true);
+    }
+  }
+
+  async function getMessage() {
+    try {
+      const textId = await getTextId();
+      const summary = await getTextFromId(textId);
+
+      setSummary(summary);
+    } catch (e) {
+      console.log("getMessage: ", e);
+    }
+  }
 
   return (
     <>
@@ -26,12 +60,21 @@ export default function Home() {
           </h1>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <FileUploaderDroppable file={video} onFilesSet={setVideo} />
+            <FileUploaderDroppable
+              file={video}
+              onFilesSet={setVideo}
+              onSubmit={onSubmit}
+              getMessage={getMessage}
+              videoUploading={videoUploading}
+              textProcessing={!videoUploaded}
+            />
 
             <div>
-              <Card className="h-full">
+              <Card className="max-h-full overflow-auto">
                 <CardHeader></CardHeader>
-                <CardContent>knknkn</CardContent>
+                <CardContent className="">
+                  <p>{summary}</p>
+                </CardContent>
                 <CardFooter></CardFooter>
               </Card>
             </div>
