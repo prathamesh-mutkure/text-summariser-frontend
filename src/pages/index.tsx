@@ -7,11 +7,11 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
+import { toast } from "~/components/ui/use-toast";
 import { getTextFromId, getTextId, uploadFile } from "~/lib/apis";
 
 export default function Home() {
   const [video, setVideo] = useState<File | null>(null);
-  const [textId, setTextId] = useState<string | null>(null);
   const [summary, setSummary] = useState<string | null>(``);
 
   const [videoUploading, setVideoUploading] = useState(false);
@@ -31,6 +31,11 @@ export default function Home() {
     } finally {
       setVideoUploading(false);
       setVideoUploaded(true);
+
+      toast({
+        title: "Error",
+        description: "Failed to upload video",
+      });
     }
   }
 
@@ -41,7 +46,10 @@ export default function Home() {
 
       setSummary(summary);
     } catch (e) {
-      console.log("getMessage: ", e);
+      toast({
+        title: "Processing....",
+        description: "The video is still processing, try again in few mins",
+      });
     }
   }
 
