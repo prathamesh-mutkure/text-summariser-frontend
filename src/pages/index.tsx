@@ -25,17 +25,20 @@ export default function Home() {
       setVideoUploading(true);
       const result = await uploadFile(video);
 
-      console.log(result);
+      toast({
+        title: result[1] ?? "Failed, please try again",
+        description: "Now try getting text in few mins",
+      });
     } catch (e) {
       console.log("Error uploading: ", e);
-    } finally {
-      setVideoUploading(false);
-      setVideoUploaded(true);
 
       toast({
         title: "Error",
         description: "Failed to upload video",
       });
+    } finally {
+      setVideoUploading(false);
+      setVideoUploaded(true);
     }
   }
 
