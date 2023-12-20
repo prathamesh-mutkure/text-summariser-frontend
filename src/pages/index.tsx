@@ -81,10 +81,16 @@ export default function Home() {
             />
 
             <div>
-              <Card className="max-h-full overflow-auto">
+              <Card className="h-full max-h-full overflow-auto">
                 <CardHeader></CardHeader>
                 <CardContent className="">
-                  <p>{summary}</p>
+                  {summary ? (
+                    <p>{summary}</p>
+                  ) : (
+                    <p className="italic text-muted-foreground">
+                      Summary will appear here
+                    </p>
+                  )}
                 </CardContent>
                 <CardFooter></CardFooter>
               </Card>
